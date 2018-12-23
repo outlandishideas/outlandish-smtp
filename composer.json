@@ -1,0 +1,23 @@
+{
+  "name": "outlandish/outlandish-smtp",
+  "type": "wordpress-muplugin",
+  "description": "Provides a number of different ways to set how WordPress sends emails",
+  "license": "MIT",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "Nick Sellen",
+      "email": "nick@outlandish.com"
+    },
+    {
+      "name": "Matt Kendon",
+      "email": "matt@outlandish.com"
+    }
+  ],
+  "keywords": [
+    "wordpress",
+    "smtp",
+    "wp",
+    "plugin"
+  ]
+}
