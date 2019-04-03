@@ -3,7 +3,7 @@
  * Plugin Name: Outlandish SMTP Plugin
  * Plugin URI: https://outlandish.com/
  * Description: Provides a number of different ways to set how WordPress sends emails
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Outlandish
  * Author URI: https://outlandish.com/
  * License: MIT License
@@ -48,6 +48,12 @@ if (getenv('SES_SMTP_USER') && getenv('SES_SMTP_PASS')) {
 add_filter("wp_mail_from", function ( $original_email_address ) {
     $from_email = getenv('FROM_EMAIL_ADDRESS');
     return $from_email ?: $original_email_address;
+});
+
+// changes what the wp_mail from name is if the constant is set
+add_filter("wp_mail_from_name", function ( $original_from_name ) {
+    $from_name = getenv('FROM_EMAIL_NAME');
+    return $from_name ?: $original_from_name;
 });
 
 add_action('wp_mail_failed', function ($wp_error) {
