@@ -44,6 +44,32 @@ if (getenv('SES_SMTP_USER') && getenv('SES_SMTP_PASS')) {
     });
 }
 
+/**
+ * Filters out the MIME-Version header. It is already added by PHPMailer, and mails with
+ * duplicate headers are rejected by AWS SES.
+ **/
+add_filter('wp_mail', function ($args) {
+    $headers = $args['headers'];
+    if (empty($headers) || is_array($headers)) {
+        return $args;
+    }
+    $headers = preg_split('#\r?\n#', $headers);
+    $headers = array_filter($headers, function ($header) {
+        $header = trim($header);
+        if (empty($header)) {
+            return false;
+        }
+        $key = strtolower(explode(':', $header)[0]);
+        // PHPMailer adds this header; duplicate headers are rejected by AWS SES
+        if ($key === 'mime-version') {
+            return false;
+        }
+        return true;
+    });
+    $args['headers'] = $headers;
+    return $args;
+});
+
 // changes what the wp_mail from address is if the constant is set
 add_filter("wp_mail_from", function ( $original_email_address ) {
     $from_email = getenv('FROM_EMAIL_ADDRESS');
