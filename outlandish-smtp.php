@@ -29,7 +29,7 @@ if (getenv('SES_SMTP_USER') && getenv('SES_SMTP_PASS')) {
     // Use mailtrap
 
     $user = getenv('MAILTRAP_USER');
-    $pass = getenv('MAILTRAP_pass');
+    $pass = getenv('MAILTRAP_PASS');
 
     add_action('phpmailer_init', function ($phpmailer) use ($user, $pass) {
         $phpmailer->isSMTP();
