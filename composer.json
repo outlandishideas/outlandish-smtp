@@ -3,7 +3,7 @@
   "type": "wordpress-muplugin",
   "description": "Provides a number of different ways to set how WordPress sends emails",
   "license": "MIT",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "authors": [
     {
       "name": "Nick Sellen",
