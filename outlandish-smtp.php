@@ -3,7 +3,7 @@
  * Plugin Name: Outlandish SMTP Plugin
  * Plugin URI: https://outlandish.com/
  * Description: Provides a number of different ways to set how WordPress sends emails
- * Version: 1.1.0
+ * Version: 1.1.1
  * Author: Outlandish
  * Author URI: https://outlandish.com/
  * License: MIT License
