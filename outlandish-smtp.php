@@ -3,19 +3,24 @@
  * Plugin Name: Outlandish SMTP Plugin
  * Plugin URI: https://outlandish.com/
  * Description: Provides a number of different ways to set how WordPress sends emails
- * Version: 1.1.1
+ * Version: 1.1.2
  * Author: Outlandish
  * Author URI: https://outlandish.com/
  * License: MIT License
  */
 
-if (getenv('SES_SMTP_USER') && getenv('SES_SMTP_PASS')) {
+function getEnvValue($name)
+{
+    return $_ENV[$name] ?? getenv($name);
+}
+
+if (getEnvValue('SES_SMTP_USER') && getEnvValue('SES_SMTP_PASS')) {
     // Send using SES
 
-    $user = getenv('SES_SMTP_USER');
-    $pass = getenv('SES_SMTP_PASS');
-    $port = getenv('SES_SMTP_PORT') ?: '587';
-    $host = getenv('SES_SMTP_HOST') ?: 'email-smtp.eu-west-1.amazonaws.com';
+    $user = getEnvValue('SES_SMTP_USER');
+    $pass = getEnvValue('SES_SMTP_PASS');
+    $port = getEnvValue('SES_SMTP_PORT') ?: '587';
+    $host = getEnvValue('SES_SMTP_HOST') ?: 'email-smtp.eu-west-1.amazonaws.com';
 
     add_action('phpmailer_init', function ($phpmailer) use ($user, $pass, $host, $port) {
         $phpmailer->isSMTP();
@@ -25,11 +30,11 @@ if (getenv('SES_SMTP_USER') && getenv('SES_SMTP_PASS')) {
         $phpmailer->Username = $user;
         $phpmailer->Password = $pass;
     });
-} elseif (getenv('MAILTRAP_USER') && getenv('MAILTRAP_PASS')) {
+} elseif (getEnvValue('MAILTRAP_USER') && getEnvValue('MAILTRAP_PASS')) {
     // Use mailtrap
 
-    $user = getenv('MAILTRAP_USER');
-    $pass = getenv('MAILTRAP_PASS');
+    $user = getEnvValue('MAILTRAP_USER');
+    $pass = getEnvValue('MAILTRAP_PASS');
 
     add_action('phpmailer_init', function ($phpmailer) use ($user, $pass) {
         $phpmailer->isSMTP();
@@ -39,14 +44,14 @@ if (getenv('SES_SMTP_USER') && getenv('SES_SMTP_PASS')) {
         $phpmailer->Username = $user;
         $phpmailer->Password = $pass;
     });
-} elseif (getenv('SMTP_HOST')) {
+} elseif (getEnvValue('SMTP_HOST')) {
     // Use SMTP_* env variables
 
-    $host = getenv('SMTP_HOST');
-    $port = getenv('SMTP_PORT') ?: '25';
-    $secure = getenv('SMTP_SECURE') ?: '';
-    $user = getenv('SMTP_USER');
-    $pass = getenv('SMTP_PASS');
+    $host = getEnvValue('SMTP_HOST');
+    $port = getEnvValue('SMTP_PORT') ?: '25';
+    $secure = getEnvValue('SMTP_SECURE') ?: '';
+    $user = getEnvValue('SMTP_USER');
+    $pass = getEnvValue('SMTP_PASS');
 
     add_action('phpmailer_init', function ($phpmailer) use ($user, $pass, $host, $port, $secure) {
         $phpmailer->isSMTP();
@@ -89,13 +94,13 @@ add_filter('wp_mail', function ($args) {
 
 // changes what the wp_mail from address is if the constant is set
 add_filter("wp_mail_from", function ($original_email_address) {
-    $from_email = getenv('FROM_EMAIL_ADDRESS');
+    $from_email = getEnvValue('FROM_EMAIL_ADDRESS');
     return $from_email ?: $original_email_address;
 });
 
 // changes what the wp_mail from name is if the constant is set
 add_filter("wp_mail_from_name", function ($original_from_name) {
-    $from_name = getenv('FROM_EMAIL_NAME');
+    $from_name = getEnvValue('FROM_EMAIL_NAME');
     return $from_name ?: $original_from_name;
 });
 
